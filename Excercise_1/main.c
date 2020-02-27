@@ -1,3 +1,9 @@
+/*
+ * @author: Jordi Jaspers
+ * @date 28/03/2020
+ * @title: Excercise_1 using Fork()
+*/
+
 //include libraries
 #include <stdio.h>
 
