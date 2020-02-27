@@ -9,6 +9,6 @@ MAIN:	main.c
 	gcc	-c	main.c
 
 CLEAN:
-	rm	*.o	 *.exe
+	rm	*.o	 OUTPUT
 
 ALL:	CLEAN	MAIN	OUTPUT

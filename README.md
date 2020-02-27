@@ -11,7 +11,7 @@ Jordi Jaspers [[Github](https://github.com/Jordi-Jaspers "Github Page"), [Linked
 All the different excercises are saved in this repository. Thess excercises are part of the RTOS-course of the KULeuven/UHasselt University. Course Information can be found on the following [Link](https://uhintra03.uhasselt.be/studiegidswww/opleidingsonderdeel.aspx?a=2019&i=4082&n=4&t=01 "ECTS Page"). 
 
 ## Documentation  
-Excercise_1: A C-program that creates 4 child-processes to calculate and prints all the different prime numbers (>10k).
+Excercise_1: A C-program that creates 4 child-processes to calculate and prints all the different prime numbers (>=10k).
 Excercise_2: ...
 
 ## What We Learned
@@ -21,12 +21,15 @@ Excercise_2: ...
  * Basic use of System calls & Interrupts
  * ...
   
-## TODO-List:  
--   Create MAKE-File
--   Create 4 child processes
--   Calculate Prime numbers (>10k)
--   Print all the numbers
--   Connect child processes with the c-program
+## TODO-List:
+**Excercise_1:**
+-   Create MAKE-File -> done!
+-   Create 4 child processes using fork() -> done!
+-   Calculate Prime numbers (>10k) -> done!
+-   Print all the numbers -> done!
+-   Connect child processes with the c-program -> done!  
+  
+**Excercise_2:**
 -   ...
 
 ## Troubleshooting:   
@@ -34,4 +37,4 @@ Excercise_2: ...
 
 ## References:  
  * Troubleshooting: <https://stackoverflow.com/>
- * ...
+ * using Fork(): <https://www.geeksforgeeks.org/fork-system-call/>
