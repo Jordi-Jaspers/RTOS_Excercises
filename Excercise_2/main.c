@@ -13,21 +13,23 @@
 #include <signal.h>
 
 #define NUMBER_OF_THREADS 5
-#define MAX_COUNT 100000
+#define MAX_COUNT 50000
 
 static sem_t obj_produced;
 static sem_t obj_consumed;
 
 static int shelf;
-pthread_mutex_t lock_shelf;
+pthread_mutex_t m_lock;
 
 void * producer() {
   int i;
   
   for(i=2; i< MAX_COUNT; i++) {
+    pthread_mutex_lock(&m_lock);
     shelf = i;
     sem_post(&obj_produced);
     sem_wait(&obj_consumed);
+    pthread_mutex_unlock(&m_lock);
   }
 
   return NULL;
@@ -51,6 +53,7 @@ void * consumer(void *ID) {
     }
 
     while(1) {
+        pthread_mutex_lock(&m_lock);
         sem_wait(&obj_produced);
         VUT = shelf;
         sem_post(&obj_consumed);
@@ -58,13 +61,15 @@ void * consumer(void *ID) {
 
         isPrime = 1;
         for (i=2;i<VUT; i++) {
-        if (VUT % i ==0) {
-            isPrime = 0;
-        }
+            if (VUT % i ==0) {
+                isPrime = 0;
+            }
         }
         if(isPrime==1) {
-        printf("    thread #%d announces that %d is prime.\n", *localID, i);
+            printf("    thread #%d announces that %d is prime.\n", *localID, i);
         }
+        
+        pthread_mutex_unlock(&m_lock);
     }
 
     // close connection
