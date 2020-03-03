@@ -39,6 +39,14 @@ Excercise_3:...
 -   Modify the code that the error is prevented.
 -   Create Report about the code
 
+**Report**
+Analyse exercise 6_4_3.c (shown below) and write a report (< 3 pages):
+* describe what the program does
+* make a chart that plots ‘the elapsed real time’ the program consumes in function of the number of ‘the number of threads that are contributing’
+* the scale on the X-axis goes from 2 to 300 with at least 8 data points should be present in the chart
+* TIP: the command time
+* interpret the chart
+
 ## Troubleshooting:   
 -   Nothing yet...  
 

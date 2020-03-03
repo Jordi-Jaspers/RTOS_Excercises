@@ -13,13 +13,13 @@
 #include <signal.h>
 
 #define NUMBER_OF_THREADS 5
-#define MAX_COUNT 500000
+#define MAX_COUNT 100000
 
 static sem_t obj_produced;
 static sem_t obj_consumed;
 
 static int shelf;
-
+pthread_mutex_t lock_shelf;
 
 void * producer() {
   int i;
@@ -34,27 +34,41 @@ void * producer() {
 }
 
 
-void * consumer() {
-  unsigned char isPrime;
-  int i;
-  int VUT;
+void * consumer(void *ID) {
+    //declare local variable
+    unsigned char isPrime;
+    int i;
+    int VUT;
+    int *localID = (int *)ID;
 
-  while(1) {
-    sem_wait(&obj_produced);
-    VUT = shelf;
-    sem_post(&obj_consumed);
-    printf("[CONSUMER] %d\n", VUT);
+    // creating a FILE variable
+    FILE *fptr;
+    
+    // open the file in write mode
+    if((fptr=freopen("terminal_output", "w" ,stdout))==NULL) {
+    printf("Cannot open file.\n");
+    exit(1);
+    }
 
-    isPrime = 1;
-    for (i=2;i<VUT; i++) {
-      if (VUT % i ==0) {
-        isPrime = 0;
-      }
+    while(1) {
+        sem_wait(&obj_produced);
+        VUT = shelf;
+        sem_post(&obj_consumed);
+        printf("[CONSUMER ID: %d]: %d\n", *localID, VUT);
+
+        isPrime = 1;
+        for (i=2;i<VUT; i++) {
+        if (VUT % i ==0) {
+            isPrime = 0;
+        }
+        }
+        if(isPrime==1) {
+        printf("    thread #%d announces that %d is prime.\n", *localID, i);
+        }
     }
-    if(isPrime==1) {
-      printf("    thread #x announces that %d is prime.\n", i);
-    }
-  }
+
+    // close connection
+    fclose(fptr);
 }
 
 
@@ -83,8 +97,11 @@ int main(void) {
   printf("Producer thread created\n");
 
   // create consumer threads
+  int IDArray [NUMBER_OF_THREADS];
+
   for(i=1;i<NUMBER_OF_THREADS;i++) {
-    err = pthread_create(&(tid[i]), NULL, &consumer, NULL);
+    IDArray[i] = i;
+    err = pthread_create(&(tid[i]), NULL, &consumer, &IDArray[i]);
     if (err != 0) {
       printf("\ncan't create consumer thread %d: [%s]", i, strerror(err));
     }
