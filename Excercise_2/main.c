@@ -1,7 +1,7 @@
 /*
  * @author: Jordi Jaspers
  * @date 06/04/2020
- * @title: Excercise_1 using Fork()
+ * @title: Excercise_2 preventing problem
 */
 
 #include <stdio.h>
