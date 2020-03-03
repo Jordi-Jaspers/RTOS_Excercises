@@ -44,16 +44,17 @@ void * consumer(void *ID) {
     int *localID = (int *)ID;
 
     // creating a FILE variable
-    // FILE *fptr;
+    FILE *fptr;
     
     // open the file in write mode
-    // if((fptr=freopen("terminal_output", "w" ,stdout))==NULL) {
-    // printf("Cannot open file.\n");
-    // exit(1);
-    // }
+    if((fptr=freopen("terminal_output", "w" ,stdout))==NULL) {
+    printf("Cannot open file.\n");
+    exit(1);
+    }
+
+
 
     while(1) {
-        pthread_mutex_lock(&m_lock);
         sem_wait(&obj_produced);
         VUT = shelf;
         sem_post(&obj_consumed);
@@ -68,12 +69,10 @@ void * consumer(void *ID) {
         if(isPrime==1) {
             printf("    thread #%d announces that %d is prime.\n", *localID, i);
         }
-
-        pthread_mutex_unlock(&m_lock);
     }
 
     // close connection
-    // fclose(fptr);
+    fclose(fptr);
 }
 
 
