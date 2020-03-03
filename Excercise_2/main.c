@@ -11,9 +11,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <time.h>
 
 #define NUMBER_OF_THREADS 5
-#define MAX_COUNT 500000
+#define MAX_COUNT 50000
 
 static sem_t obj_produced;
 static sem_t obj_consumed;
@@ -43,17 +44,6 @@ void * consumer(void *ID) {
     int VUT;
     int *localID = (int *)ID;
 
-    // creating a FILE variable
-    FILE *fptr;
-    
-    // open the file in write mode
-    if((fptr=freopen("terminal_output", "w" ,stdout))==NULL) {
-    printf("Cannot open file.\n");
-    exit(1);
-    }
-
-
-
     while(1) {
         sem_wait(&obj_produced);
         VUT = shelf;
@@ -70,59 +60,80 @@ void * consumer(void *ID) {
             printf("    thread #%d announces that %d is prime.\n", *localID, i);
         }
     }
-
-    // close connection
-    fclose(fptr);
 }
 
 
-int main(void) {
-  int i = 0, err;
-  pthread_t tid[NUMBER_OF_THREADS];
+int main(void) {  
+    // creating a FILE variable
+    FILE *fptr;
+    char str[100];
 
-  // create semaphores
-  err = sem_init(&obj_produced, 0, 0);
-  if(err != 0) {
-    printf("\ncan't create semaphore: obj_produced [%s]", strerror(err));
-    return 1;
-  }
-  err = sem_init(&obj_consumed, 0, 0);
-  if(err != 0) {
-    printf("\ncan't create semaphore: obj_produced [%s]", strerror(err));
-    return 1;
-  }
+    sprintf(str, "Output_%d_Threads", NUMBER_OF_THREADS);
 
-  // create producer thread
-  err = pthread_create(&(tid[i]), NULL, &producer, NULL);
-  if (err != 0) {
-    printf("\ncan't create producer thread: [%s]", strerror(err));
-    return 1;
-  } 
-  printf("Producer thread created\n");
-
-  // create consumer threads
-  int IDArray [NUMBER_OF_THREADS];
-
-  for(i=1;i<NUMBER_OF_THREADS;i++) {
-    IDArray[i] = i;
-    err = pthread_create(&(tid[i]), NULL, &consumer, &IDArray[i]);
-    if (err != 0) {
-      printf("\ncan't create consumer thread %d: [%s]", i, strerror(err));
+    // open the file in write mode
+    if((fptr=freopen(str, "w" ,stdout))==NULL) {
+        printf("Cannot open file.\n");
+        exit(1);
     }
-    printf("Consumer thread %d created\n", i);
-  }
 
-  // wait for producer thread
-  pthread_join(tid[0], NULL);
+    //Start counter;  
+    clock_t begin = clock();
 
-  // kill consumer threads 
-  for(i=1;i<NUMBER_OF_THREADS;i++) {
-    pthread_kill(tid[i], 9);
-  }
+    int i = 0, err;
+    pthread_t tid[NUMBER_OF_THREADS];
 
-  // delete the semaphores
-  sem_destroy(&obj_produced);
-  sem_destroy(&obj_consumed);
+    // create semaphores
+    err = sem_init(&obj_produced, 0, 0);
+    if(err != 0) {
+        printf("\ncan't create semaphore: obj_produced [%s]", strerror(err));
+        return 1;
+    }
+    err = sem_init(&obj_consumed, 0, 0);
+    if(err != 0) {
+        printf("\ncan't create semaphore: obj_produced [%s]", strerror(err));
+        return 1;
+    }
 
-  return 0;
+    // create producer thread
+    err = pthread_create(&(tid[i]), NULL, &producer, NULL);
+    if (err != 0) {
+        printf("\ncan't create producer thread: [%s]", strerror(err));
+        return 1;
+    } 
+    printf("Producer thread created\n");
+
+    // create consumer threads
+    int IDArray [NUMBER_OF_THREADS];
+
+    for(i=1;i<NUMBER_OF_THREADS;i++) {
+        IDArray[i] = i;
+        err = pthread_create(&(tid[i]), NULL, &consumer, &IDArray[i]);
+        if (err != 0) {
+        printf("\ncan't create consumer thread %d: [%s]", i, strerror(err));
+        }
+        printf("Consumer thread %d created\n", i);
+    }
+
+    // wait for producer thread
+    pthread_join(tid[0], NULL);
+
+    // kill consumer threads 
+    for(i=1;i<NUMBER_OF_THREADS;i++) {
+        pthread_kill(tid[i], 9);
+    }
+
+    // delete the semaphores
+    sem_destroy(&obj_produced);
+    sem_destroy(&obj_consumed);
+
+    //End counter
+    clock_t end = clock();  
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
+    printf("Execution time: %d \n Amount of threads: %d \n Counter Size: %d", time_spent, NUMBER_OF_THREADS, MAX_COUNT);
+
+    // close connection
+    fclose(fptr);
+
+    return 0;
 }
