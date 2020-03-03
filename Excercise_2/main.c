@@ -13,7 +13,7 @@
 #include <signal.h>
 
 #define NUMBER_OF_THREADS 5
-#define MAX_COUNT 50000
+#define MAX_COUNT 500000
 
 static sem_t obj_produced;
 static sem_t obj_consumed;
