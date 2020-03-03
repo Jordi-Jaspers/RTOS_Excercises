@@ -12,13 +12,18 @@ All the different excercises are saved in this repository. Thess excercises are 
 
 ## Documentation  
 Excercise_1: A C-program that creates 4 child-processes to calculate and prints all the different prime numbers (>=10k).
-Excercise_2: ...
-
+  
+Excercise_2: Solve the problem of the original C-code. So, the code doesn't give any errors. Prevent the chance that multiple consumers handle the same number.
+  
+Excercise_3:...  
+  
 ## What We Learned
  * Basic C-programming
  * Basic CL usage
  * Usage of MAKE-files
  * Basic use of System calls & Interrupts
+ * Creating threads and processes
+ * basic muli-threaded programming
  * ...
   
 ## TODO-List:
@@ -30,7 +35,9 @@ Excercise_2: ...
 -   Connect child processes with the c-program -> done!  
   
 **Excercise_2:**
--   ...
+-   Copy original C-code -> done!
+-   Modify the code that the error is prevented.
+-   Create Report about the code
 
 ## Troubleshooting:   
 -   Nothing yet...  
