@@ -13,8 +13,8 @@
 #include <signal.h>
 #include <time.h>
 
-#define NUMBER_OF_THREADS 5
-#define MAX_COUNT 50000
+#define NUMBER_OF_THREADS 250
+#define MAX_COUNT 500000
 
 static sem_t obj_produced;
 static sem_t obj_consumed;
@@ -35,7 +35,6 @@ void * producer() {
 
   return NULL;
 }
-
 
 void * consumer(void *ID) {
     //declare local variable
@@ -117,6 +116,15 @@ int main(void) {
     // wait for producer thread
     pthread_join(tid[0], NULL);
 
+    //End counter
+    clock_t end = clock();  
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
+    printf("\n END PROCESS \n Execution time: %f \n Amount of threads: %d \n Counter Size: %d", time_spent, NUMBER_OF_THREADS, MAX_COUNT);
+
+    // close connection
+    fclose(fptr);
+
     // kill consumer threads 
     for(i=1;i<NUMBER_OF_THREADS;i++) {
         pthread_kill(tid[i], 9);
@@ -125,15 +133,6 @@ int main(void) {
     // delete the semaphores
     sem_destroy(&obj_produced);
     sem_destroy(&obj_consumed);
-
-    //End counter
-    clock_t end = clock();  
-    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-
-    printf("Execution time: %d \n Amount of threads: %d \n Counter Size: %d", time_spent, NUMBER_OF_THREADS, MAX_COUNT);
-
-    // close connection
-    fclose(fptr);
 
     return 0;
 }

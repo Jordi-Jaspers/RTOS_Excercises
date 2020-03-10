@@ -24,6 +24,7 @@ Excercise_3:...
  * Basic use of System calls & Interrupts
  * Creating threads and processes
  * basic muli-threaded programming
+ * linked lists in C
  * ...
   
 ## TODO-List:
@@ -36,8 +37,8 @@ Excercise_3:...
   
 **Excercise_2:**
 -   Copy original C-code -> done!
--   Modify the code that the error is prevented.
--   Create Report about the code
+-   Modify the code that the error is prevented. -> done!
+-   Create Report about the code -> done!
 
 **Report**
 Analyse exercise 6_4_3.c (shown below) and write a report (< 3 pages):
@@ -46,6 +47,24 @@ Analyse exercise 6_4_3.c (shown below) and write a report (< 3 pages):
 * the scale on the X-axis goes from 2 to 300 with at least 8 data points should be present in the chart
 * TIP: the command time
 * interpret the chart
+
+**Excercise_3:**
+**Excercise 3.1:**
+* The structure you provided can be expanded with a third property: book* next, pointing to the next element in the row. That way, when looping through all books, we simply need to follow the ‘next’ pointer, until a NULL is reached, indicating the end of the library. This technique makes it possible to loop through things without knowing it’s size! Write the required struct and complete the function bodies of create_books() and print_books().
+  
+**Tips: You may hardcode the four books mentioned above in the create_books() function. Pay attention that you keep the order of the entries !**
+  
+**Excercise 3.2**
+* Create the function book* sort_books(book* library). Display the original library and then print it again, after applying the sort_books() function.
+
+**Tips:**
+1. Use the strcmp() function from <string.h> to compare two strings.
+2. The sorting algorithm that you use is not important. You can simply use bubble sort. However, if you want to use a fancy approach, feel welcome to do so.
+3. Sorting should be done by moving the objects, not the content of the objects.
+4. For the sake of simplicity, you may assume that the length of the library is fixed to 4.
+
+**Excercise 3.3**
+* Changes the function pointer of sort_books() from sort_books_by_author() to sort_books_by_title().
 
 ## Troubleshooting:   
 -   Nothing yet...  
