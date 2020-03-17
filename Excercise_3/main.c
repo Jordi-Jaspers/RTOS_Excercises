@@ -10,9 +10,9 @@
 
 // typedef of "book"
 typedef struct node {
-  char* title;
-  char* author;
-  struct node* next;
+    char * title;
+    char * author;
+    struct node * next;
 } book;
 
 //static declarations

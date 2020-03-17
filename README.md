@@ -66,6 +66,11 @@ Analyse exercise 6_4_3.c (shown below) and write a report (< 3 pages):
 **Excercise 3.3**
 * Changes the function pointer of sort_books() from sort_books_by_author() to sort_books_by_title().
 
+**Excercise_4:**
+* Write a program in C-language that forks 5 processes. These processes edit their own priority divided over the following values (-20, -10, 0, 10, 19). The content of these processes is a double nested "for-loop"  of the previous prime-number excercise. After the task has been executed it has to report a message on the screen with the PID and priority of the process. 
+
+**Tip: Assure that the parent-process waits untill all the child-processes are finished.**
+
 ## Troubleshooting:   
 -   Nothing yet...  
 

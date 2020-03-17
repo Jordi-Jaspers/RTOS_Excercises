@@ -26,7 +26,7 @@ int main()
 void prime(){
     int i, flag;
     int LOW = 0;
-    int HIGH = 10000;
+    int HIGH = 50;
 
     printf("Prime numbers between %d and %d are: \n", LOW, HIGH);
 
@@ -43,7 +43,7 @@ void prime(){
 
         if (flag == 0){
             printf("%d \n", LOW);
-            sleep(1);
+            // sleep(1);
         }
         ++LOW;
     }
