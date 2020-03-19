@@ -9,6 +9,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <time.h>
+#include <sys/time.h>
 #include <sys/resource.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -136,11 +137,14 @@ int main()
         }
         else if(pid == 0) 
         {   
+            printf("Creating child-process! \n");
+
             //Start counter;  
             clock_t beginChild = clock();
 
-            //changing priority or nice(PRIORITY_LIST[i]);
-            setpriority(PRIO_PROCESS, getpid(), PRIORITY_LIST[i]);
+            //changing priority or nice(PRIORITY_LIST[i-1]);
+            setpriority(PRIO_PROCESS, getpid(), PRIORITY_LIST[i-1]);
+            printf("Changed priority to %d! \n", getpriority(PRIO_PROCESS, getpid())); 
 
             //getting Proces ID (PID)
             printf("[CHILD(%d) PID] %d \n", i+1, getpid()); 
@@ -154,9 +158,9 @@ int main()
 
             //storing data
             store_process(process, duration, i, getpid(), getpriority(PRIO_PROCESS, getpid()));
-            
+
             //ending child program
-            printf("Child Program succesfully executed! \n"); 
+            printf("Child Program with priority (%d) has succesfully been executed! \n", getpriority(PRIO_PROCESS, getpid())); 
             exit(0);
         }
         else{
@@ -164,6 +168,7 @@ int main()
             //waiting for all the child processes 
             pid = wait(&retval);
             printf("Parent: child with PID %ld exited with status 0x%x.\n", (long)pid, retval);
+            printf("---------------------------------------------------\n");
         }
     } 
 
