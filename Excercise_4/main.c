@@ -14,58 +14,59 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-int PROCESS_AMOUNT = 5;
-int PRIORITY_LIST[5] = {-20, -10, 0, 10, 19};
+
+#define NUMOF_CHILDREN 5
+
+int const PRIORITY_LIST[5] = {-20, -10, 0, 10, 19};
 
 //struct for process
-typedef struct node {
-  int duration;
+struct node {
+  float duration;
   int localID;
   int pid;
   int priority;
-} process;
+}process[NUMOF_CHILDREN];
 
 /*
  *  Calculate average time of every process
  */	
-void getavgTime(process* processes[]) 
+void getavgTime(struct node processes[]) 
 {   
     int pid;
     int priority;
-	int waitTime;
-    int duration;
-    int waitDuration;
-    int total_waitTime = 0;
-    int total_duration = 0; 
+	float waitTime;
+    float duration;
+    float waitDuration;
+    float total_waitTime = 0.0;
+    float total_duration = 0.0; 
 	
 	//Display processes along with all details 
-	printf("ProcessID: | Priority: | Duration: | Wait: | Duration+Wait: \n"); 
-	for (int i=0; i < PROCESS_AMOUNT; i++) 
+	printf("ProcessID: | Priority: | Duration: |    WaitTime:   | Duration+Wait: \n"); 
+	for (int i=0; i < NUMOF_CHILDREN; i++) 
 	{   
-        pid = processes[i] -> pid; 
-        priority =  processes[i] -> priority;
+        pid = (int) processes[i].pid; 
+        priority = (int) processes[i].priority;
 
-        waitTime = (processes[0] -> duration) - (processes[i] -> duration);
-        duration = processes[i] -> duration;
+        waitTime = ((float) processes[0].duration) - ((float) processes[i].duration);
+        duration = (float) processes[i].duration;
         waitDuration = waitTime + duration;
 
 		total_waitTime = total_waitTime + waitTime; 
 		total_duration = total_duration + duration; 
 
-		printf("    %d  ", pid);            //ProcessID:
-        printf("    %d  ", priority);       //Priority:
-		printf("    %d  ", duration );      //Duration:
-		printf("	%d  ", waitTime );      //Wait:
-		printf("	%d\n", waitDuration);            //Duration+Wait:
+		printf("    %d  ",              pid);                //ProcessID:
+        printf("          %d  ",        priority);           //Priority:
+		printf("     %f  ",             duration );          //Duration:
+		printf("     %f  ",             waitTime );          //Wait:
+		printf("      %f\n",            waitDuration);       //Duration+Wait:
 	} 
 
-	int s=(float)total_waitTime / (float) PROCESS_AMOUNT; 
-	int t=(float)total_duration / (float) PROCESS_AMOUNT; 
+	int s=(float)total_waitTime / (float) NUMOF_CHILDREN; 
+	int t=(float)total_duration / (float) NUMOF_CHILDREN; 
 
 	printf("Average Job Waiting Time (AJWT)= %d \n",s); 
-	printf("\n"); 
 	printf("Average Job Completion Time (AJCT)= %d \n",t); 
-} 
+}
 
 /*
  *  Calculate the prime numbers of a certain range.
@@ -99,39 +100,34 @@ void prime(int pid){
 /*
  *  Storing all the information of the process.
  */	
-process* create_process(int duration, int localID, int pid, int priority) {
-
-    // make an object
-    process *newelement;
-    newelement = malloc(sizeof(process));
-
-    // initialise the object
-    newelement->duration = duration;
-    newelement->localID = localID;
-    newelement->pid = pid;
-    newelement->priority = priority;
-    
-    if (newelement == NULL) {
-        printf("ERROR: memory could not be allocated\n");
-        exit (1);
-    }
-
-    return newelement;
+void store_process(struct node processptr[], float duration, int localID, int pid, int priority) {
+    // storing the data in the object
+    processptr[localID].localID = localID;
+    processptr[localID].duration = duration;
+    processptr[localID].pid = pid;
+    processptr[localID].priority = priority;
 }
 
 /*
  *  Main function
  */     
 int main() 
-{ 
-    process* processes[PROCESS_AMOUNT]; 
+{  
+    //local variables
     int pid;
+    int retval;
     
-    double duration;
+    float duration;
+
+    //------------------------ testing
+    //setting up shared memory, don't know how yet...
+    
+
+    //------------------------ testing
 	
-    printf("Creating 5 child-processes (i = 5) \n");
     //Creating 5 child-processes (i = 5)
-    for(int i=0; i < PROCESS_AMOUNT; i++)  
+    printf("Creating 5 child-processes (i = 5) \n");
+    for(int i=0; i <= NUMOF_CHILDREN; i++)  
     { 
         pid = fork();
         if(pid < 0) {
@@ -154,11 +150,11 @@ int main()
 
             //End counter
             clock_t endChild = clock();  
-            duration = (double)(endChild - beginChild) / CLOCKS_PER_SEC;
+            duration = (float)(endChild - beginChild) / CLOCKS_PER_SEC;
 
             //storing data
-            processes[i] = create_process(duration, i, getpid(), getpriority(PRIO_PROCESS, getpid()));
-
+            store_process(process, duration, i, getpid(), getpriority(PRIO_PROCESS, getpid()));
+            
             //ending child program
             printf("Child Program succesfully executed! \n"); 
             exit(0);
@@ -166,14 +162,13 @@ int main()
         else{
 
             //waiting for all the child processes 
-            printf("Waiting for all the child processes \n");
-            wait(NULL);
-
-            getavgTime(processes);
+            pid = wait(&retval);
+            printf("Parent: child with PID %ld exited with status 0x%x.\n", (long)pid, retval);
         }
     } 
 
     //end of the program 
+    getavgTime(process);
     printf("Finishing main program \n");
     return 0;
 } 

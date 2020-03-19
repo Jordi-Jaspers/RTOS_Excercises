@@ -72,7 +72,7 @@ Analyse exercise 6_4_3.c (shown below) and write a report (< 3 pages):
 **Tip: Assure that the parent-process waits untill all the child-processes are finished.**
 
 ## Troubleshooting:   
--   Nothing yet...  
+-   sharing memory between child and parent processes?
 
 ## References:  
  * Troubleshooting: <https://stackoverflow.com/>
