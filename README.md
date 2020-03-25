@@ -71,9 +71,16 @@ Analyse exercise 6_4_3.c (shown below) and write a report (< 3 pages):
 
 **Tip: Assure that the parent-process waits untill all the child-processes are finished.**
 
+**Exercise 5:**
+* Write a program in C-language that asks for an input of the user. Depending on this input the program has to crash with a stack overflow or an heap overflow. Monitor the memory-usage of this program with the command "top". Also, create a "core dump file" and inspect the file that gets dumped after running the program.
+
 ## Troubleshooting:   
 -   sharing memory between child and parent processes?
 
 ## References:  
  * Troubleshooting: <https://stackoverflow.com/>
  * using Fork(): <https://www.geeksforgeeks.org/fork-system-call/>
+ * Stack & Heap: <https://softwareengineering.stackexchange.com/questions/207386/how-are-the-size-of-the-stack-and-heap-limited-by-the-os>
+ * Stack & Heap allocation: <https://www.geeksforgeeks.org/stack-vs-heap-memory-allocation/>
+ * Creating Overflows: <https://www.geeksforgeeks.org/heap-overflow-stack-overflow/>
+ * Core dump file: <https://linux-audit.com/understand-and-configure-core-dumps-work-on-linux/#enable-core-dumps>
